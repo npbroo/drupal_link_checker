@@ -1,0 +1,63 @@
+link_checker.settings:
+  path: '/admin/config/link-check'
+  defaults:
+    _form: '\Drupal\link_checker\Form\LinkCheckerForm'
+    _title: 'Link Checker'
+  requirements:
+    _permission: 'administer site config'
+
+link_checker.lists:
+  path: '/admin/config/link-check/list'
+  defaults:
+    _controller: '\Drupal\link_checker\Controller\LinkReport:displayLinkReport'
+    _title: 'Link Checker Results:'
+  requirements:
+    _permission: 'administer site config'
+
+link_checker.scan:
+  path: '/admin/config/link-check/scan-entities'
+  defaults:
+    _controller: '\Drupal\link_checker\Controller\EntityScanner:scan_entities'
+    _title: 'Scannning Entities...'
+  requirements:
+    _permission: 'administer site config'
+
+link_checker.query:
+  path: '/admin/config/link-check/process-links'
+  defaults:
+    _controller: '\Drupal\link_checker\Controller\LinkReport:createLinkCheckBatch'
+    _title: 'Running Cron...'
+  requirements:
+    _permission: 'administer site config'
+
+link_checker.config:
+  path: '/admin/config/link-check/config'
+  defaults:
+    _form: '\Drupal\link_checker\Form\ConfigForm'
+    _title: 'Link Checker Configuration'
+  requirements:
+    _permission: 'administrator site config'
+
+link_checker.download_csv:
+  path: '/admin/config/link-check/download-csv'
+  defaults:
+    _controller: '\Drupal\link_checker\Controller\LinkReport:downloadCsv'
+    _title: 'Export Report'
+  requirements:
+    _permission: 'administer site config'
+
+link_checker.cardinality_test:
+  path: '/admin/config/link-check/cardinality'
+  defaults:
+    _form: '\Drupal\link_checker\Form\FieldCardinalityTest'
+    _title: 'Field Cardinality Check'
+  requirements:
+    _permission: 'administer site config'
+
+link_checker.configuration:
+  path: '/admin/config/link-check/configuration'
+  defaults:
+    _form: '\Drupal\link_checker\Form\ConfigurationForm'
+    _title: 'Configuration Form'
+  requirements:
+    _permission: 'administer site config'

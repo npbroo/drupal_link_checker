@@ -1,0 +1,14 @@
+link_checker.tabs:
+  route_name: link_checker.settings
+  title: 'Settings'
+  base_route: link_checker.settings
+
+link_checker.tabs_second:
+  route_name: link_checker.lists
+  title: 'Results'
+  base_route: link_checker.settings
+
+link_checker.tabs_third:
+  route_name: link_checker.configuration
+  title: 'Configuration'
+  base_route: link_checker.settings

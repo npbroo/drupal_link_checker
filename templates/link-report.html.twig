@@ -1,0 +1,189 @@
+{% if url_report is empty and url_report_queue is empty %}
+  {# If both reports are empty then no results have been found #}
+  <p><b>No links were found for your site, edit the settings and try again.</b></p>
+{% else %}
+
+
+  {# check url_report_queue and see if it is empty or not, display table if not #}
+  {% if url_report_queue is empty %}
+    <p><b>The queue is empty, all links have been processed.</b></p>
+    {# <p><b>Scan for new links in the settings.</b></p> #}
+  {% else %}
+    <h1><u>Queue</u></h1>
+    <br>
+    <form action="process-links">
+      <input type="submit" value="Process links" >
+    </form>
+
+    <table style="width:100%" id="myTable">
+      <tr>
+        <th>URL</th>
+      </tr>
+      {% for url in url_report_queue %}
+        <tr>
+          <td><a href="{{ url.url }}">{{ url.url }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <small>{{ url_report_queue|length }} links in queue.</small>
+  {% endif %}
+
+
+  {# check url_report and see if it is empty or not, display table if not #}
+  <h1><br><u>URL Report</u></h1>
+  {% if url_report is empty %}
+    <p><b>Please process the queue to see results.</b></p>
+  {% else %}
+    {% if url_report_queue is empty %}
+      <p><b>{{ url_report|length }} total bad links found.</b> The results are listed below:</p>
+      <form action="download-csv">
+        <input type="submit" value="Export CSV">
+      </form>
+    {% endif %}
+    <br>
+
+    {# Display the link checker report table #}
+    <small>(Click a header to sort between ascending or descending order)</small>
+    <table style="width:100%" id="myTable">
+      <tr>
+        <th onclick="sortTable(0)">Entity</th>
+        <th onclick="sortTable(1)">Node</th>
+        <th onclick="sortTable(2)">URL</th>
+        <th onclick="sortTable(3)">Status</th>
+        <th onclick="sortTable(4)">Reason</th>
+      </tr>
+      {% for url in url_report %}
+        <tr>
+          <td>{{ url.entity }}</td>
+          {% if url.alias is null %}
+            <td>No Canonical Link</td>
+          {% else %}
+            <td><a href="{{ url.alias }}">{{ url.alias}} </a></td>
+          {% endif %}
+          <td><a href="{{ url.url }}">{{ url.url }}</td>
+          <td>{{ url.status }}</td>
+          <td>{{ url.reason }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <small>{{ url_report|length }} links in report.</small>
+  {% endif %}
+
+{% endif %}
+
+
+
+{#
+{% if url_report is empty %}
+  {% if stats.num_of_urls == 0 %}
+    <p><b>No links were found for your site, edit the settings and try again.</b></p>
+  {% else %}
+    <p><b>{{stats.num_of_urls}} total results for this query.</b></p>
+    <p><b>{{stats.num_of_new_urls}} new urls found.</b></p>
+    <p><b>{{stats.num_of_processed_urls}} out of {{stats.num_of_new_urls}} unaccounted urls processed.</b></p>
+    <form action="run-query">
+      <input type="submit" value="Click to process results for your chosen entities..." >
+    </form>
+  {% endif %}
+{% else %}
+    {% if stats.num_of_processed_urls != stats.num_of_new_urls %}
+      <p><b>{{stats.num_of_urls}} total results for this query.</b></p>
+      <p><b>{{stats.num_of_new_urls}} new urls found.</b></p>
+      <p><b>{{stats.num_of_processed_urls}} out of {{stats.num_of_new_urls}} urls processed. </b><p>
+      <form action="run-query">
+        <input type="submit" value="Click to process the next batch..." >
+      </form>
+    {% else %}
+      <p>All {{stats.num_of_urls}} urls have been processed.</p>
+      <form action="download-csv">
+        <input type="submit" value="Export CSV">
+      </form>
+    {% endif %}
+    <p><b>{{ url_report|length }} total bad links have been found for this query.</b> The results are listed below:</p>
+    <br>
+    <small>(Click a header to sort between ascending or descending order)</small>
+    <table style="width:100%" id="myTable">
+        <tr>
+            <th onclick="sortTable(0)">Entity</th>
+            <th onclick="sortTable(1)">Node</th>
+            <th onclick="sortTable(2)">URL</th>
+            <th onclick="sortTable(3)">Status</th>
+            <th onclick="sortTable(4)">Reason</th>
+        </tr>
+        {% for url in url_report %}
+            <tr>
+                <td>{{ url.entity }}</td>
+                {% if url.alias is null %}
+                    <td>No Canonical Link</td>
+                {% else %}
+                    <td><a href="{{ url.alias }}">{{ url.alias}} </a></td>
+                {% endif %}
+                <td><a href="{{ url.url }}">{{ url.url }}</td>
+                <td>{{ url.status }}</td>
+                <td>{{ url.reason }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+#}
+
+
+
+<!-- This javascript sorts the table by ascending/ descending order-->
+<script>
+  function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("myTable");
+    switching = true;
+    // Set the sorting direction to ascending:
+    dir = "asc";
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        x = rows[i].getElementsByTagName("TD")[n];
+        y = rows[i + 1].getElementsByTagName("TD")[n];
+        /* Check if the two rows should switch place,
+        based on the direction, asc or desc: */
+        if (dir == "asc") {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        // Each time a switch is done, increase this count by 1:
+        switchcount ++;
+      } else {
+        /* If no switching has been done AND the direction is "asc",
+        set the direction to "desc" and run the while loop again. */
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
+    }
+  }
+</script>
+

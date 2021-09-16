@@ -1,0 +1,7 @@
+link_checker.admin:
+  title: 'Link Checker'
+  description: 'Check the site for broken links'
+  parent: system.admin_config_system
+  # menu_name: main
+  route_name: link_checker.settings
+  weight: 1

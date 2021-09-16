@@ -1,0 +1,5 @@
+name: Link Checker
+description: Checks pages for invalid or external links through a custom form.
+core: 8.x
+type: module
+package: Custom

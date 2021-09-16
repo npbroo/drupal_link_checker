@@ -1,0 +1,139 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the dbtng_example module.
+ */
+
+/**
+ * Implements hook_install().
+ * Creates some default entries on this module custom table.
+ * @see hook_install()
+ * @ingroup dbtng_example
+ */
+function link_checker_install() {}
+
+/**
+ * Implements hook_schema().
+ * Defines the database tables used by this module.
+ * @see hook_schema()
+ * @ingroup dbtng_example
+ */
+function link_checker_schema() {
+  $schema['link_checker_report'] = [
+    'description' => 'Stores example person entries for demonstration purposes.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique person ID.',
+      ],
+      'entity' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Entity Type: The name of the entity type being referenced.'
+      ],
+      'entity_field' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Field Type: The field type of the entity being referenced.'
+      ],
+      'entity_id' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'normal',
+        'not_null' => TRUE,
+        'description' => "Entity ID: The id of the entity."
+      ],
+      'alias' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Entity Alias: The alias the entity type is located at.'
+      ],
+      'url' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Link: The url the entity points to.'
+      ],
+      'status' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Status: The url status.'
+      ],
+      'reason' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Reason: The reason connected to the url status.'
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'entity' => ['entity'],
+      'entity_field' => ['entity_field'],
+      'alias' => ['alias'],
+      'url' => ['url'],
+      'status' => ['status'],
+      'reason' => ['reason'],
+    ],
+  ];
+
+  $schema['link_checker_entity_last_processed'] = [
+    'description' => 'Stores example person entries for demonstration purposes.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique person ID.',
+      ],
+      'entity' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Entity Type: The name of the entity type being referenced.'
+      ],
+      'entity_field' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not_null' => TRUE,
+        'default' => '',
+        'description' => 'Entity Field Type: The name of the entity field type being referenced.'
+      ],
+      'entity_id' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'normal',
+        'not_null' => TRUE,
+        'description' => "Entity ID: The id of the entity."
+      ],
+      'changed' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'big',
+        'not_null' => TRUE,
+        'description' => "Timestamp: The timestamp of the entity's last changed value when last processed by the link-checker."
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'entity' => ['entity'],
+      'entity_field' => ['entity_field'],
+      'entity_id' => ['entity_id'],
+      'changed' => ['changed'],
+    ],
+  ];
+
+  return $schema;
+}
